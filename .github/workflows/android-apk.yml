@@ -27,10 +27,11 @@ jobs:
       - uses: android-actions/setup-android@v3
 
       - name: Install
-        run: npm ci
+        run: npm ci 2>&1 | tee -a "$RUNNER_TEMP/build.log"
 
       - name: Copy the web app into the Android project
-        run: npx cap sync android
+        run: npx cap sync android 2>&1 | tee -a "$RUNNER_TEMP/build.log"
+        shell: bash -eo pipefail {0}
 
       - name: Restore signing key
         env:
@@ -49,13 +50,14 @@ jobs:
           CLIPJOD_STORE_PASSWORD: ${{ secrets.CLIPJOD_STORE_PASSWORD }}
           CLIPJOD_KEY_ALIAS: ${{ secrets.CLIPJOD_KEY_ALIAS }}
           CLIPJOD_KEY_PASSWORD: ${{ secrets.CLIPJOD_KEY_PASSWORD }}
+        shell: bash -eo pipefail {0}
         run: |
           chmod +x gradlew
           if [ -n "$CLIPJOD_KEYSTORE" ]; then
-            ./gradlew assembleRelease --no-daemon
+            ./gradlew assembleRelease --no-daemon --stacktrace 2>&1 | tee -a "$RUNNER_TEMP/build.log"
             cp app/build/outputs/apk/release/app-release.apk "$GITHUB_WORKSPACE/ClipJod.apk"
           else
-            ./gradlew assembleDebug --no-daemon
+            ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee -a "$RUNNER_TEMP/build.log"
             cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/ClipJod.apk"
           fi
 
@@ -67,9 +69,23 @@ jobs:
       - name: Publish as a GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash -eo pipefail {0}
         run: |
           TAG="v1.0.${{ github.run_number }}"
           gh release create "$TAG" ClipJod.apk \
             --title "ClipJod $TAG" \
             --notes "Android app. Download ClipJod.apk on your phone and open it to install. Android may ask you to allow installs from this source the first time." \
-            --latest
+            --latest 2>&1 | tee -a "$RUNNER_TEMP/build.log"
+
+      # keeps the last build's result and log on the ci-logs branch, so problems can be read without the Actions page
+      - name: Save build log
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/logs" && cd "$RUNNER_TEMP/logs"
+          cp "$RUNNER_TEMP/build.log" build.log 2>/dev/null || echo "no log" > build.log
+          echo "run ${{ github.run_number }} on ${{ github.sha }}: ${{ job.status }}" > status.txt
+          git init -q -b ci-logs
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A && git commit -qm "Build log for run ${{ github.run_number }}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-logs
