@@ -12,24 +12,30 @@ jobs:
   apk:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - id: checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - id: node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
-      - uses: actions/setup-java@v4
+      - id: java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      - uses: android-actions/setup-android@v3
+      - id: sdk
+        uses: android-actions/setup-android@v3
 
-      - name: Install
+      - id: install
+        name: Install
         run: npm ci 2>&1 | tee -a "$RUNNER_TEMP/build.log"
 
-      - name: Copy the web app into the Android project
+      - id: sync
+        name: Copy the web app into the Android project
         run: npx cap sync android 2>&1 | tee -a "$RUNNER_TEMP/build.log"
         shell: bash -eo pipefail {0}
 
@@ -42,7 +48,8 @@ jobs:
             echo "CLIPJOD_KEYSTORE=$RUNNER_TEMP/clipjod.keystore" >> "$GITHUB_ENV"
           fi
 
-      - name: Build APK
+      - id: build
+        name: Build APK
         working-directory: android
         env:
           VERSION_CODE: ${{ github.run_number }}
@@ -66,7 +73,8 @@ jobs:
           name: ClipJod-apk
           path: ClipJod.apk
 
-      - name: Publish as a GitHub release
+      - id: release
+        name: Publish as a GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash -eo pipefail {0}
@@ -84,6 +92,9 @@ jobs:
           mkdir -p "$RUNNER_TEMP/logs" && cd "$RUNNER_TEMP/logs"
           cp "$RUNNER_TEMP/build.log" build.log 2>/dev/null || echo "no log" > build.log
           echo "run ${{ github.run_number }} on ${{ github.sha }}: ${{ job.status }}" > status.txt
+          cat > steps.json <<'JSON'
+          ${{ toJSON(steps) }}
+          JSON
           git init -q -b ci-logs
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
