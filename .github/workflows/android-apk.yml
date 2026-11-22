@@ -27,8 +27,13 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      # GitHub's Ubuntu runners already ship the Android SDK; just make sure its licences are accepted
       - id: sdk
-        uses: android-actions/setup-android@v3
+        name: Use the preinstalled Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME" | tee -a "$RUNNER_TEMP/build.log"
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ -x "$SDKM" ]; then yes | "$SDKM" --licenses > /dev/null 2>&1 || true; fi
 
       - id: install
         name: Install
