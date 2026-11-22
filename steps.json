@@ -1,0 +1,52 @@
+{
+  "checkout": {
+    "outputs": {
+      "commit": "3499ec19d281a8886a1ff4643c7791098c6c553d",
+      "ref": "refs/heads/main"
+    },
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "node": {
+    "outputs": {
+      "node-version": "v22.23.5",
+      "cache-hit": "true"
+    },
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "java": {
+    "outputs": {
+      "distribution": "Temurin-Hotspot",
+      "path": "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64",
+      "version": "21.0.13+9"
+    },
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "sdk": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "install": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "sync": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "build": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "release": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  }
+}
