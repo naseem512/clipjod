@@ -1,0 +1,22 @@
+{
+  "name": "clipjod",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClipJod: free video editor for phone and browser. Join clips, trim, text, music, transitions, keyframes, captions. No watermark.",
+  "scripts": {
+    "sync": "cap sync android",
+    "open": "cap open android",
+    "icons": "capacitor-assets generate --android --iconBackgroundColor '#111317' --splashBackgroundColor '#111317'",
+    "serve": "npx --yes http-server www -p 8080 -c-1"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/core": "8.6.0",
+    "@capacitor/filesystem": "8.1.5",
+    "@capacitor/share": "8.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "4.0.0",
+    "@capacitor/cli": "8.6.0"
+  }
+}
