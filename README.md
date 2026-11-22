@@ -52,4 +52,4 @@ The APK lands in `android/app/build/outputs/apk/debug/`. To try the web version 
 Every push to `main` runs two GitHub Actions workflows:
 
 - **Build Android app** builds the APK and publishes it as a new release. If the repository has the secrets `CLIPJOD_KEYSTORE_B64`, `CLIPJOD_STORE_PASSWORD`, `CLIPJOD_KEY_ALIAS` and `CLIPJOD_KEY_PASSWORD`, the APK is signed with that key. Without them it builds a debug APK signed with `android/app/clipjod-debug.keystore`, which is kept in the repo so each new build installs over the previous one. For a Play Store release, create your own private key and add the secrets above.
-- **Publish web app** deploys `www/` to GitHub Pages.
+- **Publish web app** copies `www/` to the `gh-pages` branch. Turn on Pages once in *Settings → Pages* with source *Deploy from a branch*, branch `gh-pages`, folder `/ (root)`.
