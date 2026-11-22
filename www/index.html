@@ -69,7 +69,7 @@ body.dropping .canvas-wrap{outline:3px solid var(--accent);outline-offset:-3px}
 .tbtn:hover{border-color:#454b57}
 
 .panel{border-left:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;min-height:0}
-.tabs{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--line);flex:none}
+.tabs{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--line);flex:none}
 .tabs button{background:none;border:0;padding:12px 4px 10px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12.5px}
 .tabs button svg{width:18px;height:18px}
 .tabs button.on{color:var(--fg);border-bottom-color:var(--accent)}
@@ -211,6 +211,26 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--line);border-rad
 .rowadd:hover{color:var(--fg);border-color:var(--muted)}
 .spantip{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);font:600 13px var(--mono);padding:6px 12px;border-radius:8px;z-index:40;pointer-events:none}
 
+.ai-in{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px}
+.ai-adv summary{cursor:pointer;color:var(--muted);font-size:13px}
+.ai-adv[open]{display:flex;flex-direction:column;gap:8px}
+.ai-scenes{display:flex;flex-direction:column;gap:8px}
+.ai-scene{display:grid;grid-template-columns:22px 1fr;gap:4px 8px;align-items:start}
+.ai-scene b{grid-row:span 2;width:22px;height:22px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font:600 11px var(--mono);margin-top:6px}
+.ai-scene textarea{font-size:14px}
+.ai-scene .ai-in{font-size:12px;padding:5px 8px;color:var(--muted)}
+.kit{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);font-size:13px}
+.kit span,.kit b{min-width:0;overflow-wrap:anywhere}
+.kit button{flex:none;border:1px solid var(--line);background:var(--surface-2);border-radius:7px;padding:4px 10px;font-size:12px;font-weight:600}
+.moments{display:flex;flex-direction:column;gap:10px}
+.moment{display:flex;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--bg)}
+.moment>div{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.moment small{color:var(--muted)}
+.moment button{align-self:flex-start;border:1px solid var(--line);border-radius:7px;padding:5px 10px;font-size:12.5px;font-weight:600}
+.mthumb{width:64px;height:96px;flex:none;border-radius:7px;background:#222 center/cover;position:relative}
+.mthumb i{position:absolute;left:2px;right:2px;bottom:2px;font:500 9px var(--mono);font-style:normal;background:rgba(0,0,0,.7);border-radius:4px;padding:1px 2px;text-align:center}
+.tabs button{font-size:11.5px}
+
 /* modal + toast */
 .modal{position:fixed;inset:0;background:rgba(5,6,8,.72);display:grid;place-items:center;padding:16px;z-index:20}
 .sheet{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;width:min(460px,100%);max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:12px}
@@ -293,6 +313,7 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--line);border-rad
         <button data-tab="text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 6h14M12 6v13"/></svg>Text</button>
         <button data-tab="layer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><rect x="12" y="11" width="7" height="7" rx="1" fill="currentColor" opacity=".35"/></svg>Layer</button>
         <button data-tab="music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>Music</button>
+        <button data-tab="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.6L12 15l-1.8-4.4L5.5 9l4.7-1.4z"/><path d="M18 15l.8 2 2 .8-2 .7-.8 2-.8-2-2-.7 2-.8z"/></svg>AI</button>
         <button data-tab="canvas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><rect x="2" y="7" width="20" height="10" rx="2" opacity=".5"/></svg>Canvas</button>
       </nav>
       <div class="panes">
@@ -300,6 +321,7 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--line);border-rad
         <div class="pane" id="pane-text" hidden></div>
         <div class="pane" id="pane-layer" hidden></div>
         <div class="pane" id="pane-music" hidden></div>
+        <div class="pane" id="pane-ai" hidden></div>
         <div class="pane" id="pane-canvas" hidden></div>
       </div>
     </aside>
@@ -1692,12 +1714,12 @@ function setTab(t) {
   S.tab = t;
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   // only the open tab keeps its controls, so element ids never repeat across tabs
-  ['clip', 'text', 'layer', 'music', 'canvas'].forEach(k => { const pn = $('#pane-' + k); pn.hidden = k !== t; if (k !== t) pn.innerHTML = ''; });
+  ['clip', 'text', 'layer', 'music', 'ai', 'canvas'].forEach(k => { const pn = $('#pane-' + k); pn.hidden = k !== t; if (k !== t) pn.innerHTML = ''; });
   if (t !== 'clip' && S.cut) { S.cut = null; renderTimeline(); }
   renderPanel(); requestDraw();
 }
 $('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setTab(b.dataset.tab); });
-function renderPanel() { ({ clip: renderClip, text: renderText, layer: renderLayer, music: renderMusic, canvas: renderCanvasPane })[S.tab](); }
+function renderPanel() { ({ clip: renderClip, text: renderText, layer: renderLayer, music: renderMusic, ai: () => window.renderAI && renderAI(), canvas: renderCanvasPane })[S.tab](); }
 
 function renderClip() {
   const p = $('#pane-clip'), c = selClip();
@@ -2412,4 +2434,5 @@ checkpoint(true); offerDraft();
 if (!NATIVE && 'serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 
 </script>
+<script src="ai-studio.js"></script>
 </body></html>

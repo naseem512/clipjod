@@ -28,8 +28,11 @@ A free video editor for your phone and browser. Join clips, cut out parts, add t
 | Sound | Music with loop and fade, beat detection and "cut on the beat", voice-over recording, extra audio tracks with trimming, mute, fades, remove silences |
 | Export | MP4 (or WebM) at 480p/720p/1080p, 24/30/60 fps, 9:16, 1:1, 4:5, 16:9 |
 | Workflow | Undo/redo, snapping, auto-save drafts |
+| AI Studio | Faceless video from a topic, title or YouTube link: Gemini writes an original script, records the voice-over, adds Pexels stock footage or AI images, captions and a hook, plus a title, description and hashtags for upload. Auto Shorts: finds the best moments in your own long video and makes 9:16 shorts with captions |
 
 Auto captions download a speech model (40–80 MB) the first time and need internet for that step.
+
+AI Studio needs a free Google Gemini API key from [aistudio.google.com/apikey](https://aistudio.google.com/apikey), entered in the app's AI tab. Stock footage needs a free [Pexels API key](https://www.pexels.com/api/). Keys are stored only on the device and requests go straight from the device to Google and Pexels. Model names can be changed in AI → Setup → Advanced when Google renames them.
 
 ## How it is built
 
